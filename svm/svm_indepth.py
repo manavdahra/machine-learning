@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
-from matplotlib import style
 import numpy as np
+from matplotlib import style
+
 style.use('ggplot')
 
 
@@ -46,18 +47,18 @@ class SVM:
         b_range_multiples = 1
         b_multiple = 5
 
-        latest_optimum = self.max_feature_value*10
+        latest_optimum = self.max_feature_value * 10
 
         for step in step_sizes:
             w = np.array([latest_optimum, latest_optimum])
             optimized = False
             while not optimized:
                 for b in np.arange(
-                    -1*self.max_feature_value*b_range_multiples,
-                    self.max_feature_value*b_range_multiples,
-                        step*b_multiple):
+                        -1 * self.max_feature_value * b_range_multiples,
+                        self.max_feature_value * b_range_multiples,
+                        step * b_multiple):
                     for transformation in transforms:
-                        w_t = w*transformation
+                        w_t = w * transformation
                         found_option = True
                         # SMO fixes this part
                         for yi in self.data:
@@ -79,8 +80,8 @@ class SVM:
             opt_choice = opt_dict[norms[0]]
             self.w = opt_choice[0]
             self.b = opt_choice[1]
-            latest_optimum = opt_choice[0][0] + step*2
-        
+            latest_optimum = opt_choice[0][0] + step * 2
+
         for yi in self.data:
             for xi in self.data[yi]:
                 print(xi, ':', yi * (np.dot(self.w, xi) + self.b))
@@ -102,9 +103,9 @@ class SVM:
         # nsv = -1
         # dec = 0
         def hyperplane(x, w, b, v):
-            return (-w[0]*x-b + v) / w[1]
-        
-        datarange = (self.min_feature_value*0.9, self.max_feature_value*1.1)
+            return (-w[0] * x - b + v) / w[1]
+
+        datarange = (self.min_feature_value * 0.9, self.max_feature_value * 1.1)
         hyp_x_min = datarange[0]
         hyp_x_max = datarange[1]
 
@@ -122,26 +123,26 @@ class SVM:
 
         plt.show()
 
+
 data_dict = {
     -1: np.array([[1, 7], [2, 8], [3, 8]]),
     1: np.array([[5, 1], [6, -1], [7, 3]]),
 }
 
-
 svm = SVM()
 svm.fit(data=data_dict)
 predict_us = [
-  [0, 10],
-  [1, 3],
-  [3, 4],
-  [3, 5],
-  [5, 5],
-  [5, 6],
-  [6, -5],
-  [5, 8],
+    [0, 10],
+    [1, 3],
+    [3, 4],
+    [3, 5],
+    [5, 5],
+    [5, 6],
+    [6, -5],
+    [5, 8],
 ]
 
 for p in predict_us:
-  # print(np.array(p))
-  svm.predict(p)
+    # print(np.array(p))
+    svm.predict(p)
 svm.visualize()

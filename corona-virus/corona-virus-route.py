@@ -1,26 +1,21 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib import style
-from sklearn import preprocessing, model_selection, svm
 import datetime
 
-style.use('ggplot')
+import pandas as pd
 
 df = pd.read_csv('dataset/coronavirusdataset/route.csv')
 
 for index, row in df.iterrows():
-  try:
-    timestamp = datetime.datetime.strptime(df.iloc[index]['date'], "%Y-%m-%d").timestamp()
-    df.at[index, 'date'] = timestamp
-  except ValueError as e:
-    print(e)
+    try:
+        timestamp = datetime.datetime.strptime(df.iloc[index]['date'], "%Y-%m-%d").timestamp()
+        df.at[index, 'date'] = timestamp
+    except ValueError as e:
+        print(e)
 
 cols = ['lat', 'long']
 geo_df = pd.DataFrame(columns=cols)
 for lat in range(360):
-  for long in range(180):
-    geo_df = geo_df.append(pd.DataFrame([[lat, long]]))
+    for long in range(180):
+        geo_df = geo_df.append(pd.DataFrame([[lat, long]]))
 
 print(geo_df.head())
 
@@ -40,4 +35,3 @@ print(geo_df.head())
 
 # plt.scatter(x, y)
 # plt.show()
-

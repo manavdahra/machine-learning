@@ -1,7 +1,6 @@
 import numpy as np
-from sklearn import preprocessing, model_selection, svm
 import pandas as pd
-import pickle
+from sklearn import model_selection, svm
 
 df = pd.read_csv('dataset/breast-cancer-wisconsin.data')
 df.replace('?', -99999, inplace=True)
@@ -20,8 +19,8 @@ accuracy = clf.score(x_test, y_test)
 print('Accuracy:', accuracy)
 
 example_measures = np.array([
-  [4,2,1,1,2,1,3,1,1],
-  [4,2,2,1,2,2,3,1,1]
+    [4, 2, 1, 1, 2, 1, 3, 1, 1],
+    [4, 2, 2, 1, 2, 2, 3, 1, 1]
 ])
 example_measures = example_measures.reshape(len(example_measures), -1)
 

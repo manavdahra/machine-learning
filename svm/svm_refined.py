@@ -1,19 +1,23 @@
 # Mathieu Blondel, September 2010
 # License: BSD 3 clause
 
-import numpy as np
-from numpy import linalg
 import cvxopt
 import cvxopt.solvers
+import numpy as np
+from numpy import linalg
+
 
 def linear_kernel(x1, x2):
     return np.dot(x1, x2)
 
+
 def polynomial_kernel(x, y, p=3):
     return (1 + np.dot(x, y)) ** p
 
+
 def gaussian_kernel(x, y, sigma=5.0):
-    return np.exp(-linalg.norm(x-y)**2 / (2 * (sigma ** 2)))
+    return np.exp(-linalg.norm(x - y) ** 2 / (2 * (sigma ** 2)))
+
 
 class SVM(object):
 
@@ -29,11 +33,11 @@ class SVM(object):
         K = np.zeros((n_samples, n_samples))
         for i in range(n_samples):
             for j in range(n_samples):
-                K[i,j] = self.kernel(X[i], X[j])
+                K[i, j] = self.kernel(X[i], X[j])
 
-        P = cvxopt.matrix(np.outer(y,y) * K)
+        P = cvxopt.matrix(np.outer(y, y) * K)
         q = cvxopt.matrix(np.ones(n_samples) * -1)
-        A = cvxopt.matrix(y, (1,n_samples))
+        A = cvxopt.matrix(y, (1, n_samples))
         b = cvxopt.matrix(0.0)
 
         if self.C is None:
@@ -65,7 +69,7 @@ class SVM(object):
         self.b = 0
         for n in range(len(self.a)):
             self.b += self.sv_y[n]
-            self.b -= np.sum(self.a * self.sv_y * K[ind[n],sv])
+            self.b -= np.sum(self.a * self.sv_y * K[ind[n], sv])
         self.b /= len(self.a)
 
         # Weight vector
@@ -91,8 +95,10 @@ class SVM(object):
     def predict(self, X):
         return np.sign(self.project(X))
 
+
 if __name__ == "__main__":
     import pylab as pl
+
 
     def gen_lin_separable_data():
         # generate training data in the 2-d case
@@ -105,12 +111,13 @@ if __name__ == "__main__":
         y2 = np.ones(len(X2)) * -1
         return X1, y1, X2, y2
 
+
     def gen_non_lin_separable_data():
         mean1 = [-1, 2]
         mean2 = [1, -1]
         mean3 = [4, -4]
         mean4 = [-4, 4]
-        cov = [[1.0,0.8], [0.8, 1.0]]
+        cov = [[1.0, 0.8], [0.8, 1.0]]
         X1 = np.random.multivariate_normal(mean1, cov, 50)
         X1 = np.vstack((X1, np.random.multivariate_normal(mean3, cov, 50)))
         y1 = np.ones(len(X1))
@@ -119,12 +126,13 @@ if __name__ == "__main__":
         y2 = np.ones(len(X2)) * -1
         return X1, y1, X2, y2
 
+
     def gen_non_lin_non_separable_data():
         mean1 = [-1, 2]
         mean2 = [1, -1]
         mean3 = [4, -4]
         mean4 = [-4, 4]
-        cov = [[1.6,2.0], [2.0, 1.6]]
+        cov = [[1.6, 2.0], [2.0, 1.6]]
         X1 = np.random.multivariate_normal(mean1, cov, 50)
         X1 = np.vstack((X1, np.random.multivariate_normal(mean3, cov, 50)))
         y1 = np.ones(len(X1))
@@ -132,6 +140,7 @@ if __name__ == "__main__":
         X2 = np.vstack((X2, np.random.multivariate_normal(mean4, cov, 50)))
         y2 = np.ones(len(X2)) * -1
         return X1, y1, X2, y2
+
 
     def gen_lin_separable_overlap_data():
         # generate training data in the 2-d case
@@ -144,6 +153,7 @@ if __name__ == "__main__":
         y2 = np.ones(len(X2)) * -1
         return X1, y1, X2, y2
 
+
     def split_train(X1, y1, X2, y2):
         X1_train = X1[:90]
         y1_train = y1[:90]
@@ -152,6 +162,7 @@ if __name__ == "__main__":
         X_train = np.vstack((X1_train, X2_train))
         y_train = np.hstack((y1_train, y2_train))
         return X_train, y_train
+
 
     def split_test(X1, y1, X2, y2):
         X1_test = X1[90:]
@@ -162,40 +173,48 @@ if __name__ == "__main__":
         y_test = np.hstack((y1_test, y2_test))
         return X_test, y_test
 
+
     def plot_margin(X1_train, X2_train, clf):
         def f(x, w, b, c=0):
             # given x, return y such that [x,y] in on the line
             # w.x + b = c
             return (-w[0] * x - b + c) / w[1]
 
-        pl.plot(X1_train[:,0], X1_train[:,1], "ro")
-        pl.plot(X2_train[:,0], X2_train[:,1], "bo")
-        pl.scatter(clf.sv[:,0], clf.sv[:,1], s=100, c="g")
+        pl.plot(X1_train[:, 0], X1_train[:, 1], "ro")
+        pl.plot(X2_train[:, 0], X2_train[:, 1], "bo")
+        pl.scatter(clf.sv[:, 0], clf.sv[:, 1], s=100, c="g")
 
         # w.x + b = 0
-        a0 = -4; a1 = f(a0, clf.w, clf.b)
-        b0 = 4; b1 = f(b0, clf.w, clf.b)
-        pl.plot([a0,b0], [a1,b1], "k")
+        a0 = -4;
+        a1 = f(a0, clf.w, clf.b)
+        b0 = 4;
+        b1 = f(b0, clf.w, clf.b)
+        pl.plot([a0, b0], [a1, b1], "k")
 
         # w.x + b = 1
-        a0 = -4; a1 = f(a0, clf.w, clf.b, 1)
-        b0 = 4; b1 = f(b0, clf.w, clf.b, 1)
-        pl.plot([a0,b0], [a1,b1], "k--")
+        a0 = -4;
+        a1 = f(a0, clf.w, clf.b, 1)
+        b0 = 4;
+        b1 = f(b0, clf.w, clf.b, 1)
+        pl.plot([a0, b0], [a1, b1], "k--")
 
         # w.x + b = -1
-        a0 = -4; a1 = f(a0, clf.w, clf.b, -1)
-        b0 = 4; b1 = f(b0, clf.w, clf.b, -1)
-        pl.plot([a0,b0], [a1,b1], "k--")
+        a0 = -4;
+        a1 = f(a0, clf.w, clf.b, -1)
+        b0 = 4;
+        b1 = f(b0, clf.w, clf.b, -1)
+        pl.plot([a0, b0], [a1, b1], "k--")
 
         pl.axis("tight")
         pl.show()
 
-    def plot_contour(X1_train, X2_train, clf):
-        pl.plot(X1_train[:,0], X1_train[:,1], "ro")
-        pl.plot(X2_train[:,0], X2_train[:,1], "bo")
-        pl.scatter(clf.sv[:,0], clf.sv[:,1], s=100, c="g")
 
-        X1, X2 = np.meshgrid(np.linspace(-6,6,50), np.linspace(-6,6,50))
+    def plot_contour(X1_train, X2_train, clf):
+        pl.plot(X1_train[:, 0], X1_train[:, 1], "ro")
+        pl.plot(X2_train[:, 0], X2_train[:, 1], "bo")
+        pl.scatter(clf.sv[:, 0], clf.sv[:, 1], s=100, c="g")
+
+        X1, X2 = np.meshgrid(np.linspace(-6, 6, 50), np.linspace(-6, 6, 50))
         X = np.array([[x1, x2] for x1, x2 in zip(np.ravel(X1), np.ravel(X2))])
         Z = clf.project(X).reshape(X1.shape)
         pl.contour(X1, X2, Z, [0.0], colors='k', linewidths=1, origin='lower')
@@ -204,6 +223,7 @@ if __name__ == "__main__":
 
         pl.axis("tight")
         pl.show()
+
 
     def test_linear():
         X1, y1, X2, y2 = gen_lin_separable_data()
@@ -217,10 +237,11 @@ if __name__ == "__main__":
         correct = np.sum(y_predict == y_test)
         print("{} out of {} predictions correct".format(correct, len(y_predict)))
 
-        plot_margin(X_train[y_train==1], X_train[y_train==-1], clf)
+        plot_margin(X_train[y_train == 1], X_train[y_train == -1], clf)
+
 
     def test_non_linear():
-        X1, y1, X2, y2 = gen_non_lin_non_separable_data() # gen_non_lin_separable_data()
+        X1, y1, X2, y2 = gen_non_lin_non_separable_data()  # gen_non_lin_separable_data()
         X_train, y_train = split_train(X1, y1, X2, y2)
         X_test, y_test = split_test(X1, y1, X2, y2)
 
@@ -231,7 +252,8 @@ if __name__ == "__main__":
         correct = np.sum(y_predict == y_test)
         print("{} out of {} predictions correct".format(correct, len(y_predict)))
 
-        plot_contour(X_train[y_train==1], X_train[y_train==-1], clf)
+        plot_contour(X_train[y_train == 1], X_train[y_train == -1], clf)
+
 
     def test_soft():
         X1, y1, X2, y2 = gen_lin_separable_overlap_data()
@@ -245,6 +267,7 @@ if __name__ == "__main__":
         correct = np.sum(y_predict == y_test)
         print("{} out of {} predictions correct".format(correct, len(y_predict)))
 
-        plot_contour(X_train[y_train==1], X_train[y_train==-1], clf)
+        plot_contour(X_train[y_train == 1], X_train[y_train == -1], clf)
+
 
     test_non_linear()

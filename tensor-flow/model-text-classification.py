@@ -1,8 +1,9 @@
 import os
-import sys
 import random
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 
 def load_imdb_sentiment_analysis_dataset(data_path, seed=123):
     """Loads the IMDb movie reviews sentiment analysis dataset.
@@ -56,6 +57,7 @@ def load_imdb_sentiment_analysis_dataset(data_path, seed=123):
     return ((train_texts, np.array(train_labels)),
             (test_texts, np.array(test_labels)))
 
+
 '''
 Key metrics to collect -
 
@@ -71,6 +73,8 @@ Key metrics to collect -
 
 6. Distribution of sample length: Distribution showing the number of words per sample in the dataset.
 '''
+
+
 def get_num_words_per_sample(sample_texts):
     """Returns the median number of words per sample given corpus.
 
@@ -82,6 +86,7 @@ def get_num_words_per_sample(sample_texts):
     """
     num_words = [len(s.split()) for s in sample_texts]
     return np.median(num_words)
+
 
 def plot_sample_length_distribution(sample_texts):
     """Plots the sample length distribution.
@@ -95,6 +100,6 @@ def plot_sample_length_distribution(sample_texts):
     plt.title('Sample length distribution')
     plt.show()
 
-(train_texts, train_labels), (test_texts, test_labels) = load_imdb_sentiment_analysis_dataset('dataset')
-print(get_num_words_per_sample(train_texts))
-plot_sample_length_distribution(train_texts)
+# (train_texts, train_labels), (test_texts, test_labels) = load_imdb_sentiment_analysis_dataset('dataset')
+# print(get_num_words_per_sample(train_texts))
+# plot_sample_length_distribution(train_texts)

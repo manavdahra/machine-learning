@@ -1,11 +1,8 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib import style
-import numpy as np
-from sklearn import preprocessing, model_selection, neighbors
 from datetime import date
 
-style.use('ggplot')
+import numpy as np
+import pandas as pd
+from sklearn import model_selection, neighbors
 
 case_df = pd.read_csv('dataset/coronavirusdataset/case.csv')
 patient_df = pd.read_csv('dataset/coronavirusdataset/patient.csv')

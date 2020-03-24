@@ -1,7 +1,7 @@
-import tensorflow as tf
-import numpy as np
-import matplotlib.pyplot as plt
 from random import randint
+
+import matplotlib.pyplot as plt
+import tensorflow as tf
 
 '''
 Label	Class
@@ -23,10 +23,10 @@ mnist = tf.keras.datasets.mnist
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
 model = tf.keras.models.Sequential([
-  tf.keras.layers.Flatten(input_shape=(28, 28)),
-  tf.keras.layers.Dense(128, activation='relu'),
-  tf.keras.layers.Dropout(0.2),
-  tf.keras.layers.Dense(10)
+    tf.keras.layers.Flatten(input_shape=(28, 28)),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dense(10)
 ])
 
 predictions = model(x_train[:1]).numpy()
@@ -39,11 +39,11 @@ model.compile(optimizer='adam',
 
 model.fit(x_train, y_train, epochs=5)
 
-model.evaluate(x_test,  y_test, verbose=2)
+model.evaluate(x_test, y_test, verbose=2)
 
 for _ in range(10):
-  image_index = randint(1, 10000)
-  plt.imshow(x_test[image_index].reshape(28, 28),cmap='Greys')
-  pred = model.predict(x_test[image_index].reshape(1, 28, 28))
-  print(pred.argmax())
-  plt.show()
+    image_index = randint(1, 10000)
+    plt.imshow(x_test[image_index].reshape(28, 28), cmap='Greys')
+    pred = model.predict(x_test[image_index].reshape(1, 28, 28))
+    print(pred.argmax())
+    plt.show()

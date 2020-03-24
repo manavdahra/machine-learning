@@ -1,6 +1,6 @@
-import pandas as pd
 import numpy as np
-from sklearn import preprocessing, model_selection, neighbors
+import pandas as pd
+from sklearn import model_selection, neighbors
 
 df = pd.read_csv('dataset/creditcard.csv')
 x = np.array(df.drop(['Class'], 1))

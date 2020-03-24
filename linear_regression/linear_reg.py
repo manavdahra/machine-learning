@@ -1,13 +1,13 @@
-import pandas as pd
-import quandl
-import math
-import numpy as np
 import datetime
-from sklearn import preprocessing, model_selection, svm
-from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
-from matplotlib import style
+import math
 import pickle
+
+import matplotlib.pyplot as plt
+import numpy as np
+import quandl
+from matplotlib import style
+from sklearn import preprocessing, model_selection
+from sklearn.linear_model import LinearRegression
 
 style.use('ggplot')
 
@@ -37,10 +37,10 @@ clf = LinearRegression(n_jobs=5)
 clf.fit(x_train, y_train)
 
 with open('../dump/trained_clf', 'wb') as f:
-  pickle.dump(clf, f)
+    pickle.dump(clf, f)
 
 with open('../dump/trained_clf', 'rb') as F:
-  clf = pickle.load(F)
+    clf = pickle.load(F)
 
 accuracy = clf.score(x_test, y_test)
 # print(accuracy)
@@ -57,9 +57,9 @@ oneday = 86400
 next_unix = last_unix + oneday
 
 for i in forecast_set:
-  next_date = datetime.datetime.fromtimestamp(next_unix)
-  next_unix += oneday
-  df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)] + [i]
+    next_date = datetime.datetime.fromtimestamp(next_unix)
+    next_unix += oneday
+    df.loc[next_date] = [np.nan for _ in range(len(df.columns) - 1)] + [i]
 
 print(df.tail())
 

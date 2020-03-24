@@ -25,7 +25,6 @@ print(test_data)
 iterator = train_data.make_one_shot_iterator()
 image = iterator.get_next()
 
-
 assert isinstance(train_data, tf.data.Dataset)
 assert info.features['label'].num_classes == 10
 assert info.splits['train'].num_examples == 60000
@@ -76,47 +75,49 @@ def neural_network_model(data):
     output = tf.add(tf.matmul(l3, hidden_4_layer['weights']), hidden_4_layer['biases'])
     return output
 
+
 def bin_array(num, m):
     """Convert a positive integer num into an m-bit bit vector"""
     return np.array(list(np.binary_repr(num).zfill(m))).astype(np.int8)
 
+
 def train_neural_network(x):
-  prediction = neural_network_model(x)
-  cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(prediction, y))
+    prediction = neural_network_model(x)
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(prediction, y))
 
-  optimizer = tf.compat.v1.train.AdamOptimizer().minimize(cost)
+    optimizer = tf.compat.v1.train.AdamOptimizer().minimize(cost)
 
-  num_epochs = 10
-  with tf.compat.v1.Session() as sess:
-    sess.run(tf.compat.v1.initialize_all_variables())
+    num_epochs = 10
+    with tf.compat.v1.Session() as sess:
+        sess.run(tf.compat.v1.initialize_all_variables())
 
-    i = 0
-    for epoch in range(num_epochs):
-      epoch_loss = 0
-      # ds = train_data.shuffle(1024).batch(32).prefetch(tf.data.experimental.AUTOTUNE)
-      for example in tfds.as_numpy(train_data.skip(i * batch_size).take((i + 1) * batch_size)):
-        image, label = example["image"], example["label"]
-        image = image.reshape([-1, 784])
-        label = bin_array(label, 10)
-        # print(label, bin_array(label, 10))
-        _, c = sess.run([optimizer, cost], feed_dict= {x: image, y: label})
-        epoch_loss += c 
-        i += 1
-      print('Epoch: ', epoch, ' completed out of ', num_epochs, ' loss: ', epoch_loss)
-    
+        i = 0
+        for epoch in range(num_epochs):
+            epoch_loss = 0
+            # ds = train_data.shuffle(1024).batch(32).prefetch(tf.data.experimental.AUTOTUNE)
+            for example in tfds.as_numpy(train_data.skip(i * batch_size).take((i + 1) * batch_size)):
+                image, label = example["image"], example["label"]
+                image = image.reshape([-1, 784])
+                label = bin_array(label, 10)
+                # print(label, bin_array(label, 10))
+                _, c = sess.run([optimizer, cost], feed_dict={x: image, y: label})
+                epoch_loss += c
+                i += 1
+            print('Epoch: ', epoch, ' completed out of ', num_epochs, ' loss: ', epoch_loss)
 
-    correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
-    images = np.empty([1, 784], dtype=float)
-    labels = np.empty([10], dtype=float)
-    for example in tfds.as_numpy(test_data.take(10)):
-      image, label = example["image"], example["label"]
-      image = image.reshape([-1, 784])
-      label = bin_array(label, 10)
-      # print(image.shape, label.shape)
-      images = np.append(images, image, axis=0)
-      labels = np.append(labels, label, axis=0)
-    
-    print('Accuracy: ', accuracy.eval({x: images, y: labels}))
+        correct = tf.equal(tf.argmax(prediction, 1), tf.argmax(y, 1))
+        accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
+        images = np.empty([1, 784], dtype=float)
+        labels = np.empty([10], dtype=float)
+        for example in tfds.as_numpy(test_data.take(10)):
+            image, label = example["image"], example["label"]
+            image = image.reshape([-1, 784])
+            label = bin_array(label, 10)
+            # print(image.shape, label.shape)
+            images = np.append(images, image, axis=0)
+            labels = np.append(labels, label, axis=0)
+
+        print('Accuracy: ', accuracy.eval({x: images, y: labels}))
+
 
 train_neural_network(x)
