@@ -1,11 +1,17 @@
 # machine-learning
 
 Dataset sources:
-1. Kaggle - novel-corona-virus-2019-dataset
-2. Tensorflow 2.x - tutorial dataset
+1. Kaggle
+2. MNIST
 3. OpenAI
 
-Deep Neural networks training example:
+Some examples of Machine learning experiments in this repo include:
+
+1. Linear regression
+2. K-Nearest Neighbors
+3. K-Means
+4. Support Vector Machines
+5. Deep Neural networks
 
 Source code location: [open-ai/catpole-ai.py](https://github.com/manavdahra/machine-learning/blob/master/open-ai/catpole-ai.py)
 
