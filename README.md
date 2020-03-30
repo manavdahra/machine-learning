@@ -1,4 +1,4 @@
-# machine-learning
+# Experiments on machine learning and data science
 
 Dataset sources:
 1. Kaggle
