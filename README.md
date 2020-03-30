@@ -7,6 +7,6 @@ Dataset sources:
 
 Deep Neural networks training example:
 
-Source code location: `${project_dir}/open-ai/catpole-ai.py`
+Source code location: [open-ai/catpole-ai.py](https://github.com/manavdahra/machine-learning/blob/master/open-ai/catpole-ai.py)
 
 ![Catpole Game using OpenAI](catpole.gif)
