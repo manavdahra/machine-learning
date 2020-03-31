@@ -14,7 +14,7 @@ Some examples of Machine learning experiments in this repo include:
 
 Source code location: [facial_recognition/face_identifier.py](https://github.com/manavdahra/machine-learning/blob/master/facial_recognition/face_identifier.py)
 
-<img src="/face-recognition.png" alt="Recognized face" width="250" height="250">
+<img src="face_recognition.png" alt="Recognized face" width="256" height="352">
 
 Dataset sources:
 
